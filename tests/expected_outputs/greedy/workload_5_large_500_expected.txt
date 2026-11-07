@@ -1,0 +1,8 @@
+--- Greedy Algorithm (Shortest Job First) Results ---
+Input Workload:       tests/test_inputs/workload_5_large_500.txt
+Tasks Scheduled:      500
+Schedule Order:       T2 -> T4 -> T7 -> ... -> T344 -> T432 (500 tasks total)
+Total Makespan:       4411 units
+Avg Waiting Time:     891.780 units
+Avg Turnaround Time:  900.602 units
+Scheduling Overhead:  0.373 ms

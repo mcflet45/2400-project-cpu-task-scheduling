@@ -1,0 +1,8 @@
+--- Greedy Algorithm (Shortest Job First) Results ---
+Input Workload:       tests/test_inputs/workload_3_small_8.txt
+Tasks Scheduled:      8
+Schedule Order:       T1 -> T4 -> T6 -> T2 -> T8 -> T5 -> T7 -> T3
+Total Makespan:       32 units
+Avg Waiting Time:     7.000 units
+Avg Turnaround Time:  11.000 units
+Scheduling Overhead:  0.002 ms

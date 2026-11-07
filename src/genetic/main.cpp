@@ -1,6 +1,8 @@
 #include <iostream>
 
-int main(int argc, char* argv[]) {
-    std::cout << "Algorithm runner initialized." << std::endl;
+using namespace std;
+
+int main() {
+    cout << "Algorithm runner initialized." << endl;
     return 0;
 }
