@@ -52,27 +52,29 @@ make clean
 ### Execution Commands
 - Run any individual algorithm by supplying a workload file path:
 ```bash
-./bin/greedy tests/test_inputs/sample_workload_1.txt
-./bin/brute_force tests/test_inputs/sample_workload_1.txt
-./bin/genetic tests/test_inputs/sample_workload_1.txt
+./bin/greedy tests/test_inputs/workload_1_baseline_4.txt
+./bin/brute_force tests/test_inputs/workload_1_baseline_4.txt
+./bin/genetic tests/test_inputs/workload_1_baseline_4.txt
 ```
 
 ---
 
 ## Example Input and Output
 
-### Input (tests/test_inputs/sample_workload_1.txt)
+### Input (tests/test_inputs/workload_1_baseline_4.txt)
 ```text
+# Workload 1: Baseline Workload
+# Schema: ID ArrivalTime BurstTime Priority
 T1 0 7 2
 T2 2 4 1
 T3 4 1 3
 T4 5 4 2
 ```
 
-### Output (./bin/greedy tests/test_inputs/sample_workload_1.txt)
+### Output (./bin/greedy tests/test_inputs/workload_1_baseline_4.txt)
 ```text
 --- Greedy Algorithm (Shortest Job First) Results ---
-Input Workload:       tests/test_inputs/sample_workload_1.txt
+Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
 Tasks Scheduled:      4
 Schedule Order:       T1 -> T3 -> T2 -> T4
 Total Makespan:       16 units
@@ -80,6 +82,8 @@ Avg Waiting Time:     4.000 units
 Avg Turnaround Time:  8.000 units
 Scheduling Overhead:  0.001 ms
 ```
+
+> **Note on Large Workloads:** For workloads exceeding 15 tasks (such as `workload_5_large_500.txt`), the console output automatically shortens the schedule sequence to keep logs concise while reporting full summary metrics.
 
 ---
 

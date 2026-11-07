@@ -1,0 +1,5 @@
+# Workload 2: CPU Idle Time Gap Test
+# Schema: ID ArrivalTime BurstTime Priority
+T1 0 4 1
+T2 10 3 2
+T3 18 4 1
