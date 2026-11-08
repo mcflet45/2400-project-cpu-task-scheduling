@@ -1,24 +1,21 @@
+# Operating System Files
 .DS_Store
 Thumbs.db
 
+# Build Artifacts and Binaries
 bin/
 build/
 *.o
-*.out
-*.exe
-
-*.o
 *.obj
+*.a
 *.so
 *.dylib
 *.dll
-*.a
-*.out
 *.exe
-bin/
-build/
+*.out
 *.dSYM/
 
+# IDE and Editor Metadata
 .vscode/
 .idea/
 *.swp
