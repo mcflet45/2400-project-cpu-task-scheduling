@@ -1,0 +1,8 @@
+--- Genetic Algorithm Results ---
+Input Workload:       tests/test_inputs/workload_4_medium_50.txt
+Tasks Scheduled:      50
+Schedule Order:       T1 -> T5 -> T2 -> ... -> T19 -> T45 (50 tasks total)
+Total Makespan:       311 units
+Avg Waiting Time:     66.540 units
+Avg Turnaround Time:  72.760 units
+Scheduling Overhead:  60.886 ms

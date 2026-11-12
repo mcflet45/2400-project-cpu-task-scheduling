@@ -1,0 +1,8 @@
+--- Genetic Algorithm Results ---
+Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
+Tasks Scheduled:      4
+Schedule Order:       T1 -> T3 -> T2 -> T4
+Total Makespan:       16 units
+Avg Waiting Time:     4.000 units
+Avg Turnaround Time:  8.000 units
+Scheduling Overhead:  8.623 ms

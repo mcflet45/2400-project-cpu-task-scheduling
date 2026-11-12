@@ -1,0 +1,8 @@
+--- Genetic Algorithm Results ---
+Input Workload:       tests/test_inputs/workload_2_idle_3.txt
+Tasks Scheduled:      3
+Schedule Order:       T1 -> T2 -> T3
+Total Makespan:       22 units
+Avg Waiting Time:     0.000 units
+Avg Turnaround Time:  3.667 units
+Scheduling Overhead:  8.472 ms
