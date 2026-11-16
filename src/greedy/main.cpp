@@ -11,7 +11,7 @@ using namespace std;
 using namespace std::chrono;
 
 // Read tasks line by line from the input text file
-vector<Task> load_tasks(const string& filepath) 
+vector<Task> loadTasks(const string& filepath) 
 {
     vector<Task> tasks;
     ifstream file(filepath);
@@ -44,77 +44,77 @@ vector<Task> load_tasks(const string& filepath)
 }
 
 // Greedy Heuristic: Shortest Job First (Non-Preemptive)
-vector<Task> run_greedy_scheduler(vector<Task> tasks) 
+vector<Task> runGreedyScheduler(vector<Task> tasks) 
 {
-    vector<Task> scheduled_order;
+    vector<Task> scheduledOrder;
 
     // Track which tasks have finished
     vector<bool> completed(tasks.size(), false);
     
-    int current_time = 0;
-    size_t completed_count = 0;
-    int total_tasks = tasks.size();
+    int currentTime = 0;
+    size_t completedCount = 0;
+    int totalTasks = tasks.size();
 
-    while (completed_count < tasks.size()) 
+    while (completedCount < tasks.size()) 
     {
-        int best_idx = -1;
+        int bestIdx = -1;
 
         // Look for tasks that have arrived and pick the shortest burst time
-        for (int i = 0; i < total_tasks; i++) 
+        for (int i = 0; i < totalTasks; i++) 
         {
-            if (!completed[i] && tasks[i].arrival_time <= current_time) 
+            if (!completed[i] && tasks[i].arrival_time <= currentTime) 
             {
-                if (best_idx == -1) 
+                if (bestIdx == -1) 
                 {
-                    best_idx = i;
+                    bestIdx = i;
                 } 
-                else if (tasks[i].burst_time < tasks[best_idx].burst_time) 
+                else if (tasks[i].burst_time < tasks[bestIdx].burst_time) 
                 {
-                    best_idx = i;
+                    bestIdx = i;
                 } 
-                else if (tasks[i].burst_time == tasks[best_idx].burst_time) 
+                else if (tasks[i].burst_time == tasks[bestIdx].burst_time) 
                 {
                     // Tie breaker: pick earlier arrival
-                    if (tasks[i].arrival_time < tasks[best_idx].arrival_time) 
+                    if (tasks[i].arrival_time < tasks[bestIdx].arrival_time) 
                     {
-                        best_idx = i;
+                        bestIdx = i;
                     }
                 }
             }
         }
 
-        // If CPU is idle (no task has arrived yet), skip current_time ahead to the next arrival
-        if (best_idx == -1) 
+        // If CPU is idle (no task has arrived yet), skip currentTime ahead to the next arrival
+        if (bestIdx == -1) 
         {
-            int next_arrival = 999999;
-            for (int i = 0; i < total_tasks; i++) 
+            int nextArrival = 999999;
+            for (int i = 0; i < totalTasks; i++) 
             {
-                if (!completed[i] && tasks[i].arrival_time < next_arrival) 
+                if (!completed[i] && tasks[i].arrival_time < nextArrival) 
                 {
-                    next_arrival = tasks[i].arrival_time;
+                    nextArrival = tasks[i].arrival_time;
                 }
             }
-            current_time = next_arrival;
+            currentTime = nextArrival;
             continue;
         }
 
         // Schedule the chosen task
-        Task chosen = tasks[best_idx];
-        chosen.start_time = current_time;
-        chosen.completion_time = current_time + chosen.burst_time;
+        Task chosen = tasks[bestIdx];
+        chosen.start_time = currentTime;
+        chosen.completion_time = currentTime + chosen.burst_time;
 
         // Turnaround = completion - arrival; Waiting = turnaround - burst
         chosen.turnaround_time = chosen.completion_time - chosen.arrival_time;
         chosen.waiting_time = chosen.turnaround_time - chosen.burst_time;
 
-        current_time = chosen.completion_time;
-        completed[best_idx] = true;
-        completed_count++;
+        currentTime = chosen.completion_time;
+        completed[bestIdx] = true;
+        completedCount++;
 
-        scheduled_order.push_back(chosen);
+        scheduledOrder.push_back(chosen);
     }
 
-    return scheduled_order;
+    return scheduledOrder;
 }
 
 int main(int argc, char* argv[]) 
@@ -125,8 +125,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    string input_path = argv[1];
-    vector<Task> tasks = load_tasks(input_path);
+    string inputPath = argv[1];
+    vector<Task> tasks = loadTasks(inputPath);
 
     if (tasks.empty()) 
     {
@@ -135,34 +135,34 @@ int main(int argc, char* argv[])
     }
 
     // Benchmark the algorithm's decision overhead
-    auto start_clock = high_resolution_clock::now();
-    vector<Task> scheduled = run_greedy_scheduler(tasks);
-    auto end_clock = high_resolution_clock::now();
+    auto startClock = high_resolution_clock::now();
+    vector<Task> scheduled = runGreedyScheduler(tasks);
+    auto endClock = high_resolution_clock::now();
 
-    auto duration = duration_cast<microseconds>(end_clock - start_clock);
-    double overhead_ms = duration.count() / 1000.0;
+    auto duration = duration_cast<microseconds>(endClock - startClock);
+    double overheadMs = duration.count() / 1000.0;
 
     // Compute evaluation metrics
-    double total_wait = 0.0;
-    double total_turnaround = 0.0;
+    double totalWait = 0.0;
+    double totalTurnaround = 0.0;
     int makespan = 0;
 
     for (int i = 0; i < (int)scheduled.size(); i++) 
     {
-        total_wait += scheduled[i].waiting_time;
-        total_turnaround += scheduled[i].turnaround_time;
+        totalWait += scheduled[i].waiting_time;
+        totalTurnaround += scheduled[i].turnaround_time;
         if (scheduled[i].completion_time > makespan) 
         {
             makespan = scheduled[i].completion_time;
         }
     }
 
-    double avg_wait = total_wait / scheduled.size();
-    double avg_turnaround = total_turnaround / scheduled.size();
+    double avgWait = totalWait / scheduled.size();
+    double avgTurnaround = totalTurnaround / scheduled.size();
 
     // Console output for direct verification
     cout << "--- Greedy Algorithm (Shortest Job First) Results ---\n";
-    cout << "Input Workload:       " << input_path << "\n";
+    cout << "Input Workload:       " << inputPath << "\n";
     cout << "Tasks Scheduled:      " << scheduled.size() << "\n";
 
     cout << "Schedule Order:       ";
@@ -193,9 +193,9 @@ int main(int argc, char* argv[])
 
     cout << fixed << setprecision(3);
     cout << "Total Makespan:       " << makespan << " units\n";
-    cout << "Avg Waiting Time:     " << avg_wait << " units\n";
-    cout << "Avg Turnaround Time:  " << avg_turnaround << " units\n";
-    cout << "Scheduling Overhead:  " << overhead_ms << " ms\n";
+    cout << "Avg Waiting Time:     " << avgWait << " units\n";
+    cout << "Avg Turnaround Time:  " << avgTurnaround << " units\n";
+    cout << "Scheduling Overhead:  " << overheadMs << " ms\n";
 
     return 0;
 }
