@@ -36,32 +36,50 @@ For the full theoretical background and research plan, see the [Project Proposal
 
 ### Prerequisites
 - C++17 compliant compiler (`g++` or `clang++`)
-- GNU `make`
+- GNU `make` (optional; supported on macOS, Linux, and Windows via `mingw32-make`)
 
-### Build All Executables
-- Compile all three algorithms into `bin/`:
+### Option 1: Using Make (macOS / Linux / Windows)
+- Compile all three executables into `bin/`:
 ```bash
-make
+make              # macOS / Linux
+mingw32-make      # Windows (PowerShell / CMD)
 ```
 
 - To remove compiled binaries:
 ```bash
-make clean
+make clean        # macOS / Linux
+mingw32-make clean # Windows
+```
+
+### Option 2: Direct Compilation with `g++` (Any OS / No `make` Required)
+- Create a `bin` directory and compile any algorithm directly:
+```bash
+mkdir bin
+g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/brute_force src/brute_force/main.cpp
+g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/greedy src/greedy/main.cpp
+g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/genetic src/genetic/main.cpp
 ```
 
 ### Execution Commands
-- Run any individual algorithm by supplying a workload file path:
+- **macOS / Linux:**
 ```bash
-./bin/greedy tests/test_inputs/workload_1_baseline_4.txt
 ./bin/brute_force tests/test_inputs/workload_1_baseline_4.txt
+./bin/greedy tests/test_inputs/workload_1_baseline_4.txt
 ./bin/genetic tests/test_inputs/workload_1_baseline_4.txt
+```
+
+- **Windows (PowerShell / CMD):**
+```powershell
+.\bin\brute_force.exe tests/test_inputs/workload_1_baseline_4.txt
+.\bin\greedy.exe tests/test_inputs/workload_1_baseline_4.txt
+.\bin\genetic.exe tests/test_inputs/workload_1_baseline_4.txt
 ```
 
 ---
 
 ## Example Input and Output
 
-### Input (tests/test_inputs/workload_1_baseline_4.txt)
+### Input (`tests/test_inputs/workload_1_baseline_4.txt`)
 ```text
 # Workload 1: Baseline Workload
 # Schema: ID ArrivalTime BurstTime Priority
@@ -71,7 +89,31 @@ T3 4 1 3
 T4 5 4 2
 ```
 
-### Output (./bin/greedy tests/test_inputs/workload_1_baseline_4.txt)
+### Brute Force Expected Output
+```text
+--- Brute Force Results ---
+Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
+Tasks Scheduled:      4
+Schedule Order:       T2 -> T3 -> T4 -> T1
+Total Makespan:       18 units
+Avg Waiting Time:     3.750 units
+Avg Turnaround Time:  7.750 units
+Scheduling Overhead:  0.000 ms
+```
+
+### Genetic Algorithm Expected Output
+```text
+--- Genetic Algorithm Results ---
+Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
+Tasks Scheduled:      4
+Schedule Order:       T1 -> T3 -> T2 -> T4
+Total Makespan:       16 units
+Avg Waiting Time:     4.000 units
+Avg Turnaround Time:  8.000 units
+Scheduling Overhead:  8.623 ms
+```
+
+### Greedy Algorithm Expected Output
 ```text
 --- Greedy Algorithm (Shortest Job First) Results ---
 Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
