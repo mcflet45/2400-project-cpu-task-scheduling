@@ -1,0 +1,8 @@
+﻿--- Brute Force Results ---
+Input Workload:       tests/test_inputs/workload_1_baseline_4.txt
+Tasks Scheduled:      4
+Schedule Order:       T2 -> T3 -> T4 -> T1
+Total Makespan:       18 units
+Avg Waiting Time:     3.750 units
+Avg Turnaround Time:  7.750 units
+Scheduling Overhead:  0.000 ms

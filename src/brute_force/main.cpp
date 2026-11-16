@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
     }
  
     if (n > 15) {
-        cerr << "Error: Brute force algorithm is unfeasible for N = " << n 
+        cerr << "Error: Brute force algorithm is unfeasible for N = " << n
 << " due to combinatorial explosion (N!). Exiting cleanly.\n";
         return 1;
     }
@@ -112,7 +112,10 @@ int main(int argc, char* argv[]) {
  
     do {
         SimulationResult current_result = simulate_schedule(tasks, perm);
-        if (!baseline_set || current_result.avg_waiting_time < best_result.avg_waiting_time) {
+        if (!baseline_set ||
+            current_result.avg_waiting_time < best_result.avg_waiting_time ||
+            (current_result.avg_waiting_time == best_result.avg_waiting_time &&
+             current_result.makespan < best_result.makespan)) {
             best_result = current_result;
             baseline_set = true;
         }
@@ -132,10 +135,10 @@ int main(int argc, char* argv[]) {
         }
         cout << "\n";
     } else {
-        cout << best_result.tasks[0].id << " -> " 
-<< best_result.tasks[1].id << " -> " 
-<< best_result.tasks[2].id << " -> ... -> " 
-<< best_result.tasks[n - 2].id << " -> " 
+        cout << best_result.tasks[0].id << " -> "
+<< best_result.tasks[1].id << " -> "
+<< best_result.tasks[2].id << " -> ... -> "
+<< best_result.tasks[n - 2].id << " -> "
 << best_result.tasks[n - 1].id << " (" << n << " tasks total)\n";
     }
  
