@@ -140,7 +140,7 @@ Scheduling Overhead:  0.001 ms
 Full benchmark metrics are stored in [`results/raw_data/benchmark_results.csv`](results/raw_data/benchmark_results.csv), with comparative charts in [`results/graphs/`](results/graphs/).
 
 | Algorithm | Workload | Tasks ($N$) | Makespan | Avg Waiting Time | Avg Turnaround Time | Overhead (ms) |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Brute Force**       | `workload_1_baseline_4` | 4 | 18 | 3.750 | 7.750 | 0.008 |
 | **Brute Force**       | `workload_2_idle_3`     | 3 | 22 | 0.000 | 3.667 | 0.002 |
 | **Brute Force**       | `workload_3_small_8`    | 8 | 32 | 7.000 | 11.000 | 4.678 |
