@@ -41,13 +41,13 @@ For the full theoretical background and research plan, see the [Project Proposal
 ### Option 1: Using Make (macOS / Linux / Windows)
 - Compile all three executables into `bin/`:
 ```bash
-make              # macOS / Linux
-mingw32-make      # Windows (PowerShell / CMD)
+make               # macOS / Linux
+mingw32-make       # Windows (PowerShell / CMD)
 ```
 
 - To remove compiled binaries:
 ```bash
-make clean        # macOS / Linux
+make clean         # macOS / Linux
 mingw32-make clean # Windows
 ```
 
@@ -56,23 +56,23 @@ mingw32-make clean # Windows
 ```bash
 mkdir bin
 g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/brute_force src/brute_force/main.cpp
-g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/greedy src/greedy/main.cpp
 g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/genetic src/genetic/main.cpp
+g++ -std=c++17 -Wall -Wextra -O2 -Isrc -o bin/greedy src/greedy/main.cpp
 ```
 
 ### Execution Commands
 - **macOS / Linux:**
 ```bash
 ./bin/brute_force tests/test_inputs/workload_1_baseline_4.txt
-./bin/greedy tests/test_inputs/workload_1_baseline_4.txt
 ./bin/genetic tests/test_inputs/workload_1_baseline_4.txt
+./bin/greedy tests/test_inputs/workload_1_baseline_4.txt
 ```
 
 - **Windows (PowerShell / CMD):**
 ```powershell
 .\bin\brute_force.exe tests/test_inputs/workload_1_baseline_4.txt
-.\bin\greedy.exe tests/test_inputs/workload_1_baseline_4.txt
 .\bin\genetic.exe tests/test_inputs/workload_1_baseline_4.txt
+.\bin\greedy.exe tests/test_inputs/workload_1_baseline_4.txt
 ```
 
 ---
@@ -130,11 +130,40 @@ Scheduling Overhead:  0.001 ms
 ---
 
 ## Experimental Results
-*Work in progress.*
 
-Benchmarking metrics and visualizations will be populated as full experimental trials are completed:
-- **Raw benchmark metrics:** `results/raw_data/`
-- **Visualizations & comparative plots:** `results/graphs/`
+### Benchmark Methodology
+- **Workload Provenance & Tiers:** All datasets in `tests/test_inputs/` are synthetic benchmarks constructed for this study. Small workloads (`workload_1_baseline_4`, `workload_2_idle_3`, and `workload_3_small_8`) were hand-crafted to test CPU idle-gap handling, tie-breaking, and exact optimality against Brute Force, while larger workloads (`workload_4_medium_50` and `workload_5_large_500`) were synthetically generated to evaluate asymptotic scaling.
+- **Input-Size Cutoff:** Because Brute Force evaluates all $N!$ task permutations, execution is capped at $N \le 15$ (`workload_1` through `workload_3`) to prevent combinatorial explosion.
+- **Genetic Algorithm Configuration & Reproducibility:** Evaluated with `POPULATION_SIZE = 100`, `GENERATIONS = 200`, `MUTATION_RATE = 0.05`, tournament selection with 5% elitism, and a fixed random seed (`RANDOM_SEED = 42`) for reproducible single-trial benchmark runs.
+- **Measurement Environment:** All executables were compiled with `g++ -std=c++17 -O2` and timed internally via `std::chrono::high_resolution_clock` (decision overhead reported in milliseconds alongside schedule makespan, average waiting time, and average turnaround time).
+
+Full benchmark metrics are stored in [`results/raw_data/benchmark_results.csv`](results/raw_data/benchmark_results.csv), with comparative charts in [`results/graphs/`](results/graphs/).
+
+| Algorithm | Workload | Tasks ($N$) | Makespan | Avg Waiting Time | Avg Turnaround Time | Overhead (ms) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Brute Force**       | `workload_1_baseline_4` | 4 | 18 | 3.750 | 7.750 | 0.008 |
+| **Brute Force**       | `workload_2_idle_3`     | 3 | 22 | 0.000 | 3.667 | 0.002 |
+| **Brute Force**       | `workload_3_small_8`    | 8 | 32 | 7.000 | 11.000 | 4.678 |
+| **Genetic Algorithm** | `workload_1_baseline_4` | 4 | 16 | 4.000 | 8.000 | 10.135 |
+| **Genetic Algorithm** | `workload_2_idle_3`     | 3 | 22 | 0.000 | 3.667 | 6.428 |
+| **Genetic Algorithm** | `workload_3_small_8`    | 8 | 32 | 7.000 | 11.000 | 36.892 |
+| **Genetic Algorithm** | `workload_4_medium_50`  | 50 | 311 | 66.540 | 72.760 | 60.026 |
+| **Genetic Algorithm** | `workload_5_large_500`  | 500 | 4411 | 1492.550 | 1501.372 | 2324.285 |
+| **Greedy (SJF)**      | `workload_1_baseline_4` | 4 | 16 | 4.000 | 8.000 | 0.000 |
+| **Greedy (SJF)**      | `workload_2_idle_3`     | 3 | 22 | 0.000 | 3.667 | 0.000 |
+| **Greedy (SJF)**      | `workload_3_small_8`    | 8 | 32 | 7.000 | 11.000 | 0.001 |
+| **Greedy (SJF)**      | `workload_4_medium_50`  | 50 | 311 | 59.140 | 65.360 | 0.007 |
+| **Greedy (SJF)**      | `workload_5_large_500`  | 500 | 4411 | 891.780 | 900.602 | 0.160 |
+
+### Key Findings
+- **Combinatorial Explosion (Brute Force):** Exhaustive search guarantees global optimality on small task sets (`3.750` units average waiting time on `workload_1_baseline_4`), but decision overhead grows by more than two orders of magnitude between $N=4$ and $N=8$, making $N > 15$ computationally unfeasible.
+- **Metaheuristic Search Budget Trade-off (Genetic Algorithm):** With a fixed evolutionary budget, the Genetic Algorithm converges on optimal work-conserving schedules for $N \le 8$, but its fixed evaluation budget limits convergence across the $500!$ search space while incurring `2324.285 ms` of scheduling overhead.
+- **Scalability & Efficiency (Greedy SJF):** Non-preemptive SJF matches optimal work-conserving performance on small workloads while scaling to $N=500$ in `0.160 ms`—achieving **40.3% lower average waiting time** and **~14,500× lower scheduling overhead** than the Genetic Algorithm at scale.
+
+### Comparative Visualizations
+![Scheduling Overhead Comparison](results/graphs/overhead_comparison.png)
+![Average Waiting Time Comparison](results/graphs/avg_waiting_time.png)
+![Total Makespan Comparison](results/graphs/makespan_comparison.png)
 
 ---
 

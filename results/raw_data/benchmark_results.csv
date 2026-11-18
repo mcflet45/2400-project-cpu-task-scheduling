@@ -1,0 +1,14 @@
+Algorithm,Workload,Tasks,Makespan,Avg_Waiting_Time,Avg_Turnaround_Time,Scheduling_Overhead_ms
+Brute Force,workload_1_baseline_4,4,18,3.75,7.75,0.008
+Brute Force,workload_2_idle_3,3,22,0.0,3.667,0.002
+Brute Force,workload_3_small_8,8,32,7.0,11.0,4.678
+Genetic Algorithm,workload_1_baseline_4,4,16,4.0,8.0,10.135
+Genetic Algorithm,workload_2_idle_3,3,22,0.0,3.667,6.428
+Genetic Algorithm,workload_3_small_8,8,32,7.0,11.0,36.892
+Genetic Algorithm,workload_4_medium_50,50,311,66.54,72.76,60.026
+Genetic Algorithm,workload_5_large_500,500,4411,1492.55,1501.372,2324.285
+Greedy (SJF),workload_1_baseline_4,4,16,4.0,8.0,0.0
+Greedy (SJF),workload_2_idle_3,3,22,0.0,3.667,0.0
+Greedy (SJF),workload_3_small_8,8,32,7.0,11.0,0.001
+Greedy (SJF),workload_4_medium_50,50,311,59.14,65.36,0.007
+Greedy (SJF),workload_5_large_500,500,4411,891.78,900.602,0.16
